@@ -20,23 +20,61 @@ function addTask() {
 function createTaskElement(submittedInput) {
   const li = document.createElement("li");
   li.draggable = true; // Make the list item draggable
-  li.addEventListener("dragstart", (e) => {
-    e.dataTransfer.setData("text", e.target.textContent);
-  });
 
+
+
+  li.onmousedown= function(event) {
+  
+    let shiftX = event.clientX - li.getBoundingClientRect().left;
+    let shiftY = event.clientY - li.getBoundingClientRect().top;
+    let width = li.getBoundingClientRect().width
+
+    li.style.width = width + 'px';
+    li.style.position = 'absolute';
+    li.style.zindex = 10;
+
+  moveAt(event.pageX, event.pageY);
+
+  function moveAt(pageX, pageY) {
+    li.style.left = pageX - shiftX + 'px';
+    li.style.top = pageY - shiftY + 'px';
+  }
+
+  function onMouseMove(event) {
+    moveAt(event.pageX, event.pageY);
+  }
+
+  document.addEventListener('mousemove', onMouseMove);
+  li.onmouseup = function() {
+    document.removeEventListener('mousemove', onMouseMove);
+    li.onmouseup = null;
+  };
+
+  };
+
+  li.ondragstart = function() {
+    return false;
+  };
+  
   const taskTextElement = document.createElement("span");
   taskTextElement.textContent = submittedInput;
   li.appendChild(taskTextElement);
 
   const input = document.createElement("input");
   input.type = "checkbox";
-  input.addEventListener("click", function() {
+  input.onmousedown= function(e) {
+    e.stopImmediatePropagation()
+  }
+  input.addEventListener("click", function(e) {
     taskTextElement.classList.toggle("strikethrough");
   });
   li.appendChild(input);
 
   const editButton = document.createElement("button");
   editButton.innerHTML = '<ion-icon name="pencil-outline"></ion-icon>';
+  editButton.onmousedown= function(e) {
+    e.stopImmediatePropagation()
+  }
   editButton.onclick = function() {
     editTask(li, taskTextElement);
   };
@@ -44,6 +82,9 @@ function createTaskElement(submittedInput) {
 
   const deleteButton = document.createElement("button");
   deleteButton.innerHTML = '<ion-icon name="trash-outline"></ion-icon>';
+  deleteButton.onmousedown= function(e) {
+    e.stopImmediatePropagation()
+  }
   deleteButton.onclick = function() {
     taskList.removeChild(li);
     const index = list.findIndex((item) => item.value === submittedInput);
@@ -85,12 +126,6 @@ displayTask();
 const submission = document.getElementById("submit-button");
 submission.addEventListener("click", addTask);
 
-const clear = document.getElementById("clear");
-clear.addEventListener("click", function() {
-  taskList.innerHTML = "";
-  localStorage.clear();
-});
-
 taskList.addEventListener("dragover", (e) => {
   e.preventDefault();
 });
@@ -110,7 +145,4 @@ taskList.addEventListener("drop", (e) => {
     taskList.insertBefore(draggedLi, targetLi);
   }
 });
-
-
-
 
