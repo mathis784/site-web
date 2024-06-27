@@ -11,18 +11,16 @@
     <body>
 
          
-        <div class="Container">
+        <div id="Container">
             <h1>Ma To-do-List</h1>
             <div class="c3po">
                 <div class="r2d2">
                     <div class="Champ">
                         <input type="text" id="taskInput" placeholder="ajouter une tache">
-                        <button onclick="addTask()"><ion-icon name="add-circle-outline"></ion-icon></button>
+                        <button id="submit-button" onclick="addTask()"><ion-icon name="add-circle-outline"></ion-icon></button>
                     </div>
                     <div class="select">
                         <option value="all">Toute</option>
-                        <option value="completed">complétèe</option>
-                        <option value="uncompleted">A faire</option>
                     </div>
                </div>
                <ul id="taskList"></ul>
@@ -31,13 +29,16 @@
                      text-decoration: line-through;
                      opacity: 0.5;
                    }
-                 </style>
+                </style>
+
             </div>
         </div>
-
+        
+        
         <script  type ="module"  src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule  src = "https://unpkg .com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
         <script  src="app.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
         <section class="container pt-5" id="todolist">
     </body>
 </html>
